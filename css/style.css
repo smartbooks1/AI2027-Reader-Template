@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+:root{font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;color:#202d3b;background:#f4f6f9;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer;transition:background .16s,border-color .16s,box-shadow .16s}button:focus-visible,input:focus-visible{outline:3px solid #a5c8fb;outline-offset:2px}
+.layout{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100dvh}.layout.sidebar-collapsed{grid-template-columns:minmax(0,1fr)}.layout.sidebar-collapsed .sidebar{display:none}
+.sidebar{min-width:0;background:#fff;border-right:1px solid #e4e9f0;padding:26px 16px;box-shadow:2px 0 14px #152b4405}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 12px 20px;border-bottom:1px solid #edf0f5}.brand-mark{width:40px;height:40px;border-radius:13px;background:#1d3b60;color:white;display:grid;place-items:center;font-size:20px;font-weight:700}.brand-meta{min-width:0}.brand-kicker{font-size:10px;font-weight:700;letter-spacing:.11em;color:#8494aa}.sidebar h1{font-size:15px;font-weight:700;margin:3px 0 0;line-height:1.4;overflow-wrap:anywhere}.sidebar-label{font-size:11px;letter-spacing:.08em;font-weight:700;color:#8898ab;margin:25px 13px 10px}
+.chapters{display:grid;gap:5px}.chapter{display:block;text-align:left;width:100%;border:1px solid transparent;border-radius:11px;background:transparent;padding:13px 14px;color:#506178;font-size:13px;font-weight:500;line-height:1.6;overflow-wrap:anywhere}.chapter:hover{background:#f3f6fa;color:#163d69}.chapter.active{background:#e9f1fb;color:#18538c;border-color:#d6e7fb;font-weight:700;box-shadow:inset 3px 0 #3379be}
+.sidebar-note{font-size:11px;line-height:1.7;color:#9aa7b8;margin:25px 12px}
+.main{min-width:0;display:flex;flex-direction:column}
+.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:5;background:#ffffffee;backdrop-filter:blur(12px);border-bottom:1px solid #e3e8ee;min-height:74px;padding:12px 22px;box-shadow:0 3px 13px #25344b08}
+.toolbar button{border:1px solid #dce3eb;color:#44566b;background:#fff;padding:9px 12px;min-height:38px;white-space:nowrap;border-radius:9px;font-size:12px;font-weight:600}.toolbar button:hover{background:#eff5fb;border-color:#aec8e4}.toolbar button:disabled{opacity:.36;cursor:default}
+#menu{background:#f1f5f9;color:#325474;border-color:#e6ecf3}.booktitle{margin-right:auto;min-width:0;max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700;color:#243449}
+.toolbar label{display:inline-flex;align-items:center;gap:5px;color:#718197;white-space:nowrap;font-size:12px}.pageNumber{width:53px;border:1px solid #dce3eb;border-radius:8px;background:#fff;text-align:center;padding:8px 5px;color:#293e55;font-size:12px}
+#zoomLabel{font-size:12px;font-weight:600;min-width:42px;text-align:center;color:#597089}
+#fit,#fitPage,#spread{background:#f8fafc}.toolbar .download{background:#224d79;color:white;text-decoration:none;border-radius:9px;padding:10px 14px;font-size:12px}.hidden{display:none!important}
+.viewer{flex:1;min-width:0;width:100%;padding:28px 22px;overflow:auto;min-height:0;background:radial-gradient(ellipse at 55% 5%,#fafbfd 0%,#f2f5f9 72%)}
+.sheets{display:flex;justify-content:center;align-items:flex-start;gap:14px;width:max-content;min-width:100%;margin:0 auto}.sheet{display:block;background:white;box-shadow:0 12px 30px #30435c25,0 2px 6px #25375014;max-width:none;border:1px solid #e6e9ee}
+.message{padding:32px;color:#62748a;line-height:1.75;font-size:14px}.message.error{color:#b42332}.message[hidden]{display:none}
+@media(max-width:1100px){.toolbar{padding:10px 13px;gap:6px}.booktitle{flex-basis:100%;max-width:100%;order:-1;padding:0 4px 4px}.layout{grid-template-columns:250px minmax(0,1fr)}}
+@media(max-width:760px){.layout,.layout.sidebar-collapsed{display:block}.sidebar{display:none;padding:12px 14px;border-right:0;border-bottom:1px solid #e4e9f0}.sidebar.open{display:block}.sidebar .brand,.sidebar-label,.sidebar-note{display:none}.chapters{grid-template-columns:1fr}.toolbar{min-height:0;padding:10px 8px;gap:6px;justify-content:center}.toolbar button{font-size:11px;padding:8px 9px;min-height:36px}.toolbar .booktitle{order:-1;flex:1 0 100%;max-width:100%;font-size:13px;padding:3px 6px 5px;margin:0}.pageNumber{width:45px;padding:7px 3px}.viewer{padding:12px 8px;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}.sheets{gap:5px;width:100%;min-width:0}.sheet{max-width:100%}#zoomLabel{min-width:34px}}
+
+/* Group navigation, zoom, and view controls without affecting the PDF canvas. */
+.toolbar{justify-content:space-between;gap:12px}
+.toolbar-heading{display:flex;align-items:center;gap:12px;flex:1 1 270px;min-width:0}
+.toolbar-heading .booktitle{margin:0;max-width:none;flex:1;min-width:0}
+.toolbar-actions{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:10px;min-width:0}
+.tool-group{display:inline-flex;align-items:center;gap:3px;padding:3px;border:1px solid #e5ebf2;border-radius:12px;background:#f7f9fc}
+.toolbar .tool-group button{border-color:transparent;background:transparent;border-radius:8px;min-height:32px;padding:6px 10px}
+.toolbar .tool-group button:hover{background:#e6eef9}
+.tool-group label{padding:0 5px}
+.tool-group #zoomLabel{padding:0 5px}
+.page-divider{font-size:12px;white-space:nowrap}
+.toolbar .view-group button{font-weight:600}
+@media(max-width:1100px){.toolbar-heading{flex-basis:100%}.toolbar-heading .booktitle{white-space:nowrap;order:0;padding:0}.toolbar-actions{width:100%;justify-content:flex-start}}
+@media(max-width:760px){.toolbar{gap:8px;padding:9px}.toolbar-heading{display:flex;flex-basis:100%;gap:7px}.toolbar .booktitle{order:0;flex:1 1 auto;max-width:none;padding:0;white-space:nowrap}.toolbar-actions{gap:6px;justify-content:center}.tool-group{padding:2px;gap:1px}.toolbar .tool-group button{padding:6px 8px;min-height:32px;font-size:11px}.tool-group label{padding:0 2px}.toolbar .view-group button{font-size:11px}.pageNumber{width:40px}}
+
+/* PC reader controls: clearer grouping and visible selected reading mode */
+@media(min-width:1101px){
+ .toolbar{min-height:68px;padding:11px 18px;gap:12px}
+ .toolbar-heading{flex:1 1 250px}
+ .toolbar-actions{gap:9px}
+ .tool-group{background:#f8fafc}
+ .toolbar .tool-group button{font-size:12px;letter-spacing:-.01em}
+ .toolbar .tool-group button:focus-visible{outline:2px solid #6eabed}
+}
+.toolbar .view-group button.mode-active{color:#14598e;background:#e3f0ff;box-shadow:inset 0 0 0 1px #b9d8f6;font-weight:700}
+.toolbar .view-group button[aria-pressed="true"]{color:#14598e;background:#e3f0ff;box-shadow:inset 0 0 0 1px #b9d8f6;font-weight:700}
+.toolbar .tool-group button[aria-pressed="false"]:hover{background:#edf3fb}
+
+/* Mobile two-row toolbar and foldaway settings. Desktop styles remain unchanged. */
+#mobileMore,.mobile-settings{display:none}
+.mobile-settings[hidden]{display:none!important}
+@media (max-width:760px), (max-width:1000px) and (pointer:coarse) {
+ .layout,.layout.sidebar-collapsed{display:block!important}
+ .sidebar,.layout.sidebar-collapsed .sidebar{display:none}
+ .sidebar.open,.layout.sidebar-collapsed .sidebar.open{display:block}
+ .sidebar{border-right:0;border-bottom:1px solid #e4e9f0;padding:12px 14px}
+ .sidebar .brand,.sidebar-label,.sidebar-note{display:none}
+ .toolbar{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:8px 10px;min-height:0}
+ .toolbar-heading{flex:0 0 auto;display:flex;min-width:0;gap:9px;width:100%;align-items:center}
+ .toolbar-heading .booktitle,.toolbar .booktitle{flex:1;min-width:0;max-width:none;order:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;padding:0;margin:0}
+ #menu{flex-shrink:0;max-width:105px;font-size:12px;padding:8px 9px}
+ .toolbar-actions{display:flex;width:100%;justify-content:space-between;align-items:center;gap:5px;flex-wrap:nowrap}
+ .toolbar .tool-group{padding:2px;gap:1px;flex-shrink:0}
+ .toolbar .tool-group button{padding:5px 8px;min-height:35px}
+ .toolbar .view-group,.toolbar .rotation-group{display:none}
+ .toolbar .pageNumber{width:43px}
+ .toolbar #zoomLabel{min-width:32px;padding:0 2px;font-size:11px}
+ #mobileMore{display:inline-block;min-height:37px;flex-shrink:0;background:#edf4fc;border:1px solid #d7e6f7;color:#24547e;font-size:11px;padding:7px 9px;border-radius:10px}
+ .mobile-settings:not([hidden]){display:block;position:absolute;right:8px;top:100%;z-index:10;width:min(310px,calc(100vw - 16px));padding:14px;background:#fff;border:1px solid #dce5f0;border-radius:0 0 14px 14px;box-shadow:0 12px 30px #152b442e}
+ .mobile-settings-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:700;font-size:13px}
+ .mobile-settings-title button{border:0;background:transparent;font-size:16px}
+ .mobile-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+ .toolbar .mobile-options button{min-height:42px;font-size:12px;background:#f6f9fc;border-color:#e2e9f2;white-space:normal}
+ .toolbar .mobile-options button[aria-pressed="true"]{background:#e4f0ff;color:#15578e;border-color:#b6d6f6}
+ .viewer{padding:12px 8px;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}
+ .sheets{gap:5px;width:100%;min-width:0}
+ .sheet{max-width:100%}
+}
+@media (max-width:390px){
+ .toolbar{padding:7px 6px}
+ .toolbar .tool-group button{padding:5px 6px}
+ #menu{font-size:11px}
+ .pageNumber{width:37px}
+}
+@media (orientation:landscape) and (pointer:coarse) and (max-height:600px){
+ .toolbar{padding:5px 10px;gap:3px}
+ .toolbar .tool-group button{min-height:30px;padding:3px 8px}
+ .toolbar #mobileMore{min-height:32px}
+ .viewer{padding:7px 9px}
+ .sidebar.open{max-height:45vh;overflow-y:auto}
+}
+
+/* Compact single-line reader toolbar in landscape on touch devices. */
+@media (orientation:landscape) and (pointer:coarse) and (max-height:600px){
+ .toolbar{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;justify-content:space-between;gap:8px;padding:5px 9px;min-height:0}
+ .toolbar-heading{display:flex;flex:1 1 0;min-width:0;width:auto;gap:6px;align-items:center}
+ .toolbar-heading .booktitle,.toolbar .booktitle{flex:1 1 0;min-width:0;max-width:none;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0;margin:0;order:0}
+ .toolbar-actions{display:flex;flex:0 0 auto;width:auto;justify-content:flex-end;gap:5px;flex-wrap:nowrap;min-width:0}
+ .toolbar #menu{max-width:73px;padding:6px 6px;min-height:31px;font-size:11px;overflow:hidden}
+ .toolbar .tool-group{padding:1px;gap:0}
+ .toolbar .tool-group button{min-height:29px;padding:3px 7px;font-size:11px}
+ .toolbar .tool-group label{padding:0 2px}
+ .toolbar .pageNumber{width:35px;padding:4px 2px;font-size:11px}
+ .toolbar #zoomLabel{min-width:30px;padding:0 1px;font-size:10px}
+ .toolbar #mobileMore{min-height:31px;padding:5px 7px;font-size:11px}
+ .viewer{padding:7px 9px}
+ .sidebar.open{max-height:42vh;overflow:auto}
+}
+
+/* Facing blank leaves when a spread contains only a cover or final page. */
+.sheets.spread-mode{gap:3px;align-items:stretch}
+.blank-page{flex:0 0 auto;background:linear-gradient(110deg,#f4f5f7 0%,#fafbfc 88%,#e8eaee 100%);box-shadow:0 8px 22px #30435c14,inset -8px 0 14px #182c3c09;border:1px solid #e6e9ee}
+.sheets.spread-mode .blank-page:last-child{background:linear-gradient(90deg,#e8eaee 0%,#fafbfc 12%,#f4f5f7 100%);box-shadow:0 8px 22px #30435c14,inset 8px 0 14px #182c3c09}
+.sheets.spread-mode .sheet{box-shadow:0 8px 22px #30435c20}
+
+/* Desktop-only page navigation at reading-area edges */
+.viewer{position:relative}
+.edge-nav{display:none}
+@media(min-width:1001px) and (pointer:fine){
+ .edge-nav{display:grid;place-items:center;position:fixed;top:55%;z-index:4;width:42px;height:60px;border:1px solid #dbe4ed;border-radius:14px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);box-shadow:0 4px 18px #172d4420;color:#345273;font-size:32px;line-height:1;opacity:.5;transition:opacity .18s,background .18s,transform .18s;cursor:pointer}
+ .edge-nav:hover{opacity:1;background:#fff;transform:translateY(-2px)}
+ .edge-nav:disabled{opacity:.12;cursor:default;pointer-events:none}
+ .edge-prev{left:calc(var(--reader-left,280px) + 10px)}
+ .edge-next{right:10px}
+ .layout.sidebar-collapsed .edge-prev{left:10px}
+}
+
+/* Resume reading prompt; never obstruct the initial PDF opening. */
+.main{position:relative}
+.resume-prompt[hidden]{display:none!important}
+.resume-prompt{position:fixed;bottom:22px;right:22px;z-index:15;width:min(355px,calc(100vw - 30px));background:#fff;border:1px solid #d9e4f0;border-radius:15px;padding:16px;box-shadow:0 12px 40px #203f602b;display:grid;gap:13px}
+.resume-copy{display:grid;gap:5px;min-width:0}
+.resume-copy strong{font-size:14px;color:#203d59}
+.resume-copy span{font-size:12px;color:#63768c;overflow-wrap:anywhere;line-height:1.55}
+.resume-actions{display:flex;gap:8px}
+.resume-actions button{border-radius:9px;min-height:38px;padding:8px 12px;border:1px solid #d4e0ec;background:#fff;color:#425a73;font-weight:600;font-size:12px;cursor:pointer}
+#resumeContinue{background:#245b90;color:#fff;border-color:#245b90}
+.resume-actions button:hover{filter:brightness(.96)}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .resume-prompt{bottom:max(12px,env(safe-area-inset-bottom));right:12px;width:calc(100vw - 24px);padding:13px}
+ .resume-actions button{flex:1}
+}
+
+/* Center the resume prompt on desktop; retain bottom sheet on mobile. */
+@media (min-width:1001px) and (pointer:fine){
+ .resume-prompt:not([hidden]){left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 40px));padding:24px;gap:18px;z-index:21;box-shadow:0 18px 55px #152b4440}
+ .resume-prompt:not([hidden])::before{content:"";position:fixed;inset:-100vmax;background:rgba(26,43,64,.18);z-index:-1;pointer-events:none}
+ .resume-copy strong{font-size:17px}
+ .resume-copy span{font-size:13px}
+ .resume-actions button{flex:1;min-height:42px}
+}
+
+/* Explicit focus reading mode: hide toolbar and navigation, retain a discreet exit. */
+.toolbar #focusMode{border:1px solid #dce3eb;background:#f7f9fc;color:#285478;border-radius:9px;min-height:35px;padding:7px 10px;font-size:12px}
+.focus-exit[hidden]{display:none!important}
+.focus-exit{position:fixed;top:10px;right:12px;z-index:30;border:1px solid #d9e4f0;background:rgba(255,255,255,.92);border-radius:999px;color:#315573;box-shadow:0 5px 16px #233c5822;padding:9px 13px;font-size:12px;font-weight:700;cursor:pointer}
+.layout.focus-reading .toolbar{display:none!important}
+.layout.focus-reading .sidebar{display:none!important}
+.layout.focus-reading{display:block!important}
+.layout.focus-reading .main{min-height:100dvh}
+.layout.focus-reading .viewer{min-height:100dvh;padding-top:16px}
+/* Keep desktop paging arrows available in focus mode; hidden on touch devices. */
+@media(max-width:1000px), (pointer:coarse){.layout.focus-reading .edge-nav{display:none!important}}
+@media(min-width:1001px) and (pointer:fine){.layout.focus-reading .edge-nav{display:grid!important;opacity:.55}.layout.focus-reading .edge-nav:hover{opacity:1}.layout.focus-reading .edge-prev{left:10px}.layout.focus-reading .edge-next{right:10px}}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .toolbar #focusMode{display:none!important}
+ .toolbar .mobile-options #mFocusMode{grid-column:1/-1;background:#e8f2fd;color:#245680;border-color:#bdd8f4}
+ .layout.focus-reading .viewer{padding-top:8px}
+ .layout.focus-reading .focus-exit{top:max(8px,env(safe-area-inset-top));right:9px;font-size:11px}
+}
+
+/* Mobile spread: portrait stays legible as a single page; landscape can show paired leaves. */
+@media (orientation:portrait) and (pointer:coarse){
+ .toolbar .mobile-options #mSpread:disabled{background:#f4f6f8;color:#8b98a7;border-color:#e2e7ec;opacity:1;cursor:not-allowed}
+}
+@media (orientation:landscape) and (pointer:coarse) and (max-height:600px){
+ .sheets.spread-mode{gap:3px}
+ .sheets.spread-mode .sheet,.sheets.spread-mode .blank-page{flex-shrink:0}
+}
+
+/* Resume controls stay discreet after the one-time introduction. */
+#resumeShortcut[hidden],#mResumeShortcut[hidden]{display:none!important}
+.toolbar #resumeShortcut{border:1px solid #cbdff0;background:#eef5fc;color:#245680;border-radius:9px;min-height:35px;padding:7px 10px;font-size:12px;font-weight:700}
+.toolbar #resumeShortcut:hover{background:#e1eefb}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .toolbar #resumeShortcut{display:none!important}
+ .toolbar .mobile-options #mResumeShortcut:not([hidden]){grid-column:1/-1;background:#edf5fd;color:#245680;border-color:#cbdff0}
+}
+
+/* Explicit bookmark controls and compact two-column mobile settings. */
+#bookmarkDelete[hidden],#mBookmarkDelete[hidden],#bookmarkSave[hidden]{display:none!important}
+.toolbar #bookmarkSave,.toolbar #bookmarkDelete{border:1px solid #cbdff0;background:#f5f9fd;color:#245680;border-radius:9px;min-height:35px;padding:7px 10px;font-size:12px;font-weight:600}
+.toolbar #bookmarkDelete{background:#fff;color:#69798b}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .toolbar #bookmarkSave,.toolbar #bookmarkDelete{display:none!important}
+ .mobile-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .toolbar .mobile-options button{grid-column:auto;min-width:0;min-height:43px;white-space:normal}
+ .toolbar .mobile-options #mFocusMode{grid-column:auto}
+ .toolbar .mobile-options #mBookmarkSave{grid-column:auto;background:#edf5fd;color:#245680;border-color:#cbdff0}
+ .toolbar .mobile-options #mResumeShortcut:not([hidden]),.toolbar .mobile-options #mBookmarkDelete:not([hidden]){grid-column:auto}
+}
+@media (orientation:portrait) and (pointer:coarse){
+ .toolbar .mobile-options #mSpread{display:none!important}
+ .toolbar .mobile-options #mFit{order:1}
+ .toolbar .mobile-options #mFitPage{order:2}
+ .toolbar .mobile-options #mRotateLeft{order:3}
+ .toolbar .mobile-options #mRotateRight{order:4}
+ .toolbar .mobile-options #mFocusMode{order:5}
+ .toolbar .mobile-options #mBookmarkSave{order:6}
+ .toolbar .mobile-options #mResumeShortcut{order:7}
+ .toolbar .mobile-options #mBookmarkDelete{order:8}
+}
+
+/* Landscape mobile settings: rotations on row 2, spread on row 3. */
+@media (orientation:landscape) and (pointer:coarse) and (max-height:600px){
+ .toolbar .mobile-options #mFit{order:1}
+ .toolbar .mobile-options #mFitPage{order:2}
+ .toolbar .mobile-options #mRotateLeft{order:3}
+ .toolbar .mobile-options #mRotateRight{order:4}
+ .toolbar .mobile-options #mSpread{order:5}
+ .toolbar .mobile-options #mFocusMode{order:6}
+ .toolbar .mobile-options #mBookmarkSave{order:7}
+ .toolbar .mobile-options #mResumeShortcut{order:8}
+ .toolbar .mobile-options #mBookmarkDelete{order:9}
+}
+
+/* Clear, consistently aligned first/last page navigation glyphs. */
+.toolbar .tool-group #firstPage,.toolbar .tool-group #lastPage{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-width:36px;font-family:Arial,'Noto Sans KR',sans-serif;font-size:17px;font-weight:800;letter-spacing:-2px;line-height:1}
+.toolbar .tool-group #firstPage span,.toolbar .tool-group #lastPage span{display:block;transform:translateY(-1px)}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .toolbar .tool-group #firstPage,.toolbar .tool-group #lastPage{min-width:31px;padding-left:4px;padding-right:6px;font-size:15px;font-weight:800}
+}
+
+/* Tighter arrows without reducing touch target visibility. */
+.toolbar .tool-group[aria-label="페이지 이동"]{gap:0;padding:2px}
+.toolbar .tool-group[aria-label="페이지 이동"] button{display:inline-flex;align-items:center;justify-content:center;padding:5px 5px;min-width:29px;line-height:1;touch-action:manipulation}
+.toolbar .tool-group[aria-label="페이지 이동"] #firstPage,.toolbar .tool-group[aria-label="페이지 이동"] #lastPage{min-width:30px;padding:5px 3px;font-size:17px;letter-spacing:-2px}
+.toolbar .tool-group[aria-label="페이지 이동"] label{gap:3px;padding:0 2px}
+@media(max-width:760px), (max-width:1000px) and (pointer:coarse){
+ .toolbar .tool-group[aria-label="페이지 이동"] button{min-width:29px;min-height:35px;padding:5px 3px}
+ .toolbar .tool-group[aria-label="페이지 이동"] #firstPage,.toolbar .tool-group[aria-label="페이지 이동"] #lastPage{min-width:30px;padding:5px 3px;font-size:16px}
+ .toolbar .tool-group[aria-label="페이지 이동"] label{gap:2px;padding:0 1px}
+ .toolbar .tool-group[aria-label="페이지 이동"] .pageNumber{width:36px}
+}
