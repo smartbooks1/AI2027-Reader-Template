@@ -1,0 +1,11 @@
+{
+  "siteTitle": "새 책 부록(전자책)",
+  "autoDiscover": true,
+  "readerDefaults": {
+    "fit": "auto",
+    "twoPage": false,
+    "allowDownload": false
+  },
+  "books": [],
+  "titleRules": []
+}
