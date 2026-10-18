@@ -150,6 +150,29 @@ function spreadRenderRatio(width,height){
  const screenRatio=Math.max(MIN_SPREAD_RENDER_RATIO,Math.min(window.devicePixelRatio||1,MAX_SPREAD_RENDER_RATIO));
  return Math.min(screenRatio,Math.sqrt(MAX_SPREAD_PAGE_PIXELS/(width*height)));
 }
+// Bounded LRU cache of rendered canvas pages. Entries are isolated per opened PDF.
+const pageCanvasCache=new Map();
+const MAX_CACHE_PIXELS=24000000;
+let pageCachePixels=0,cacheDocument=null;
+function resetCanvasCache(documentRef){
+ if(cacheDocument!==documentRef){pageCanvasCache.clear();pageCachePixels=0;cacheDocument=documentRef}
+}
+function cachedCanvas(key){
+ const value=pageCanvasCache.get(key);
+ if(value){pageCanvasCache.delete(key);pageCanvasCache.set(key,value)}
+ return value;
+}
+function keepCanvas(key,canvas){
+ const pixels=canvas.width*canvas.height;
+ if(pixels>MAX_CACHE_PIXELS/2)return;
+ const old=pageCanvasCache.get(key);
+ if(old){pageCachePixels-=old.width*old.height;pageCanvasCache.delete(key)}
+ pageCanvasCache.set(key,canvas);pageCachePixels+=pixels;
+ while(pageCachePixels>MAX_CACHE_PIXELS&&pageCanvasCache.size>1){
+  const first=pageCanvasCache.keys().next().value,removed=pageCanvasCache.get(first);
+  pageCachePixels-=removed.width*removed.height;pageCanvasCache.delete(first);
+ }
+}
 function renderNativePages(direction=0){
  cancelSpreadRendering();const token=spreadRenderToken,pages=$('nativePages');
  const animateTurn=direction&&twoPage&&!smallScreen()&&!window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -162,6 +185,7 @@ function renderNativePages(direction=0){
 }
 async function renderPageView(container,token,direction=0){
  const documentRef=pdfDocument,slots=visiblePages();
+ resetCanvasCache(documentRef);
  try{
   await new Promise(resolve=>requestAnimationFrame(resolve));
   const loaded=await Promise.all(slots.map(pageNumber=>pageNumber===null?null:documentRef.getPage(pageNumber)));
@@ -181,13 +205,18 @@ async function renderPageView(container,token,direction=0){
    if(!page){const blank=document.createElement('div');blank.className='spread-blank '+sideClass;blank.setAttribute('aria-label','빈 페이지');blank.style.width=referenceWidth+'px';blank.style.height=referenceHeight+'px';stage.appendChild(blank);return}
    const display=page.getViewport({scale}),displayWidth=Math.max(1,Math.round(display.width)),displayHeight=Math.max(1,Math.round(display.height));
    const outputScale=spreadRenderRatio(displayWidth,displayHeight);
-   const canvas=document.createElement('canvas');canvas.className='spread-page '+sideClass;canvas.width=Math.ceil(displayWidth*outputScale);canvas.height=Math.ceil(displayHeight*outputScale);canvas.style.width=displayWidth+'px';canvas.style.height=displayHeight+'px';canvas.setAttribute('aria-label',slots[index]+'쪽');stage.appendChild(canvas);renderItems.push({page,canvas,display,outputScale});
+   const canvas=document.createElement('canvas');canvas.className='spread-page '+sideClass;canvas.width=Math.ceil(displayWidth*outputScale);canvas.height=Math.ceil(displayHeight*outputScale);canvas.style.width=displayWidth+'px';canvas.style.height=displayHeight+'px';canvas.setAttribute('aria-label',slots[index]+'쪽');stage.appendChild(canvas);
+   const cacheKey=[slots[index],canvas.width,canvas.height,display.rotation].join(':');
+   const stored=cachedCanvas(cacheKey);
+   if(stored){canvas.getContext('2d',{alpha:false}).drawImage(stored,0,0)}
+   else renderItems.push({page,canvas,display,outputScale,cacheKey});
   });
   // Keep the finished spread visible while the next canvases render off screen.
   stage.hidden=!!direction;container.appendChild(stage);
   spreadRenderTasks=renderItems.map(item=>item.page.render({canvasContext:item.canvas.getContext('2d',{alpha:false}),viewport:item.display,transform:[item.outputScale,0,0,item.outputScale,0,0],background:'#fff'}));
   await Promise.all(spreadRenderTasks.map(task=>task.promise));
   if(token!==spreadRenderToken||documentRef!==pdfDocument)return;
+  for(const item of renderItems)keepCanvas(item.cacheKey,item.canvas);
   spreadRenderTasks=[];
   if(direction){
    stage.hidden=false;container.replaceChildren(stage);
