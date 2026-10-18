@@ -1,16 +1,77 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="index,follow"><title>전자책 자료실</title><link rel="stylesheet" href="./css/style.css?v=20261014b"></head><body><div class="layout"><aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark" aria-hidden="true">A</div><div class="brand-meta"><div class="brand-kicker">DIGITAL READER</div><h1 id="siteTitle">전자책 자료실</h1></div></div><div class="sidebar-label">CONTENTS · 목차</div><nav id="chapters" class="chapters" aria-label="전자책 목차"></nav><p class="sidebar-note">목차에서 원하는 장을 선택해 읽어보세요.</p></aside><main class="main"><header class="toolbar">
-<div class="toolbar-heading"><button id="menu" aria-label="목차 접기 또는 펼치기" aria-expanded="true">☰ 목차 접기</button><strong class="booktitle" id="title">전자책</strong></div>
-<div class="toolbar-actions">
-<div class="tool-group" role="group" aria-label="페이지 이동"><button id="firstPage" aria-label="첫 페이지로 이동" title="첫 페이지"><span aria-hidden="true">|←</span></button><button id="prev" aria-label="이전 페이지" title="이전 페이지"><span aria-hidden="true">←</span></button><label><input class="pageNumber" type="number" min="1" id="page" value="1" aria-label="페이지 번호"> <span class="page-divider">/ <span id="total">-</span></span></label><button id="next" aria-label="다음 페이지" title="다음 페이지"><span aria-hidden="true">→</span></button><button id="lastPage" aria-label="마지막 페이지로 이동" title="마지막 페이지"><span aria-hidden="true">→|</span></button></div>
-<div class="tool-group" role="group" aria-label="화면 확대"><button id="zoomOut" aria-label="축소" title="축소"><span aria-hidden="true">−</span></button><span id="zoomLabel">100%</span><button id="zoomIn" aria-label="확대" title="확대"><span aria-hidden="true">＋</span></button></div>
-<div class="tool-group view-group" role="group" aria-label="읽기 방식"><button id="fit" type="button" aria-pressed="false" title="화면 너비에 맞춰 보기">↔ 너비</button><button id="fitPage" type="button" aria-pressed="true" title="페이지 전체를 화면에 맞춰 보기">⛶ 전체</button><button id="spread" type="button" aria-pressed="false" title="두 페이지 나란히 보기">▣ 두 쪽</button></div>
-<div class="tool-group rotation-group" role="group" aria-label="페이지 회전"><button id="rotateLeft" type="button" aria-label="반시계방향 90도 회전" title="왼쪽으로 90도 회전">↶ 90°</button><button id="rotateRight" type="button" aria-label="시계방향 90도 회전" title="오른쪽으로 90도 회전">↷ 90°</button></div>
-<button id="mobileMore" type="button" aria-expanded="false" aria-controls="mobileSettings" aria-label="추가 보기 설정">⚙ 보기 설정</button>
-<button id="bookmarkSave" type="button" title="현재 페이지 책갈피 저장">☆ 책갈피 저장</button><button id="resumeShortcut" type="button" hidden title="책갈피 페이지로 이동">▣ 책갈피 이동</button><button id="bookmarkDelete" type="button" hidden title="저장된 책갈피 삭제">책갈피 삭제</button>
-<button id="focusMode" type="button" aria-label="집중 읽기 모드 시작" title="집중 읽기 모드">⛶ 집중 모드</button>
-<a class="download hidden" id="download" href="#">원본 다운로드</a>
-</div><div id="mobileSettings" class="mobile-settings" hidden>
-<div class="mobile-settings-title">보기 설정 <button id="closeMobileSettings" type="button" aria-label="설정 닫기">✕</button></div>
-<div class="mobile-options"><button type="button" id="mFit">↔ 너비 맞춤</button><button type="button" id="mFitPage">⛶ 전체 맞춤</button><button type="button" id="mSpread">▣ 두 쪽 보기</button><button type="button" id="mRotateLeft">↶ 왼쪽 90°</button><button type="button" id="mRotateRight">↷ 오른쪽 90°</button><button type="button" id="mFocusMode">⛶ 집중 모드 시작</button><button type="button" id="mBookmarkSave">☆ 현재 페이지 저장</button><button type="button" id="mResumeShortcut" hidden>▣ 책갈피 이동</button><button type="button" id="mBookmarkDelete" hidden>책갈피 삭제</button></div>
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="index,follow"><title>전자책 자료실</title><link rel="stylesheet" href="./css/style.css?v=20261018template"><link rel="stylesheet" href="./css/native-reader.css?v=20261018template"></head><body><div class="layout"><aside class="sidebar" id="sidebar"><div class="brand"><a class="brand-home" href="./" aria-label="처음으로 돌아가기" title="처음으로"><span class="brand-logo template-logo" aria-hidden="true">B</span></a><div class="brand-meta"><div class="brand-kicker">DIGITAL READER</div><h1 id="siteTitle">전자책 자료실</h1></div></div><!-- 선택 사항: 책 표지를 사용하려면 이미지 파일을 추가하고 이곳에 img.sidebar-cover를 배치하세요. --><div class="sidebar-label"><span>목차</span><span class="sidebar-label-en">CONTENTS</span></div><nav id="chapters" class="chapters" aria-label="온라인 부록 목차"></nav><p class="sidebar-note">목차에서 원하는 장을 선택해 읽어보세요.</p></aside><main class="main"><header class="toolbar">
+<div class="mobile-header"><a class="mobile-home" href="./" aria-label="처음으로 돌아가기" title="처음으로"><span class="mobile-logo template-logo" aria-hidden="true">B</span></a><div class="mobile-toc"><button id="mobileTocButton" class="mobile-toc-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="mobileTocMenu"><svg class="mobile-toc-list-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5h10M7 10h10M7 15h10M3 5h.01M3 10h.01M3 15h.01"/></svg><span class="mobile-toc-label">목차 열기</span><span id="mobileTocBadge" class="mobile-toc-badge">0</span><svg class="mobile-toc-chevron" viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg></button><div id="mobileTocMenu" class="mobile-toc-menu" role="listbox" aria-label="전자책 목차" hidden><div class="mobile-toc-menu-head"><strong>목차</strong><span id="mobileTocCount">0개</span></div><div id="mobileTocList" class="mobile-toc-list"></div></div></div></div>
+</header>
+<section class="viewer native-viewer is-welcome" id="viewer" aria-label="전자책 열람">
+<article id="welcome" class="welcome" aria-labelledby="welcomeTitle">
+<div class="welcome-card">
+<span class="welcome-eyebrow">DIGITAL READER · ONLINE RESOURCES</span>
+<h2 id="welcomeTitle">전자책 자료실에 오신 것을 환영합니다.</h2>
+<div class="welcome-body">
+<p>이곳에서는 책과 함께 제공되는 온라인 자료를 열람할 수 있습니다.</p>
+<p>왼쪽 목차(모바일에서는 상단의 ‘목차 열기’)에서 원하는 자료를 선택하시면 바로 열람할 수 있습니다. PC와 모바일에서 페이지 이동, 확대·축소, 책갈피 등의 기능을 이용해 편리하게 읽어보세요.</p>
+<p class="welcome-closing"><strong>이 자료들이 여러분의 학습과 활용에 작은 도움이 되기를 바랍니다.</strong></p>
 </div>
-</header><section class="viewer" id="viewer" aria-label="전자책 열람"><button id="focusExit" class="focus-exit" type="button" hidden aria-label="집중 모드 종료">✕ 집중 모드 종료</button><div id="message" class="message">전자책을 준비하고 있습니다…</div><div class="sheets" id="sheets"></div><button id="edgePrev" class="edge-nav edge-prev" type="button" aria-label="이전 페이지" title="이전 페이지">‹</button><button id="edgeNext" class="edge-nav edge-next" type="button" aria-label="다음 페이지" title="다음 페이지">›</button></section></main></div><script type="module" src="./js/reader.js?v=20261014e"></script></body></html>
+<section class="welcome-copyright" aria-labelledby="copyrightTitle"><h3 id="copyrightTitle">이용 안내</h3><p>자료의 저작권과 이용 조건은 각 출판물 및 권리자의 안내를 따릅니다.</p></section>
+</div>
+</article>
+<div id="message" class="message" role="status">온라인 부록을 준비하고 있습니다…</div>
+<div class="native-pdf-shell">
+<div id="readerPagebar" class="reader-pagebar" role="toolbar" aria-label="PDF 보기 도구">
+<button id="menu" class="desktop-toc-toggle" type="button" aria-label="목차 접기 또는 펼치기" aria-expanded="true">☰ 목차 접기</button>
+<div class="reader-page-controls reader-tool-group" role="group" aria-label="페이지 이동">
+<button id="firstPage" type="button" aria-label="첫 페이지로 이동" title="첫 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 20 9 12l10-8M5 19V5"/></svg></button>
+<button id="prevPage" type="button" aria-label="이전 페이지" title="이전 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+<span class="reader-page-status"><input id="currentPage" class="reader-page-input" type="number" min="1" max="1" step="1" inputmode="numeric" value="1" aria-label="이동할 페이지" disabled> / <span id="totalPages">-</span></span>
+<button id="nextPage" type="button" aria-label="다음 페이지" title="다음 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+<button id="lastPage" type="button" aria-label="마지막 페이지로 이동" title="마지막 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 4 10 8-10 8M19 5v14"/></svg></button>
+</div>
+<div id="mobilePrimaryTools" class="mobile-primary-tools" aria-label="모바일 주요 도구">
+<div class="reader-tool-group mobile-primary-zoom-controls" role="group" aria-label="화면 확대">
+<button id="mobileZoomOut" type="button" aria-label="10% 축소" title="10% 축소"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+<output id="mobileZoomLabel" class="reader-zoom-status" aria-live="polite">100%</output>
+<button id="mobileZoomIn" type="button" aria-label="10% 확대" title="10% 확대"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<div class="reader-tool-group mobile-primary-fit-controls" role="group" aria-label="화면 맞춤 방식">
+<button id="mobileFitWidth" type="button" aria-label="너비 맞춤" title="너비 맞춤" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6v12M20 6v12M8 12h8M8 12l2.5-2.5M8 12l2.5 2.5M16 12l-2.5-2.5M16 12l-2.5 2.5"/></svg></button>
+<button id="mobileFitPage" type="button" aria-label="페이지 맞춤" title="페이지 맞춤" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5a1 1 0 0 0-1 1v4M15 4h4a1 1 0 0 1 1 1v4M9 20H5a1 1 0 0 1-1-1v-4M15 20h4a1 1 0 0 0 1-1v-4"/><rect x="8" y="6.5" width="8" height="11" rx="1"/></svg></button>
+</div>
+<div class="reader-tool-group mobile-primary-view-controls" role="group" aria-label="페이지 보기 방식">
+<button id="mobileSinglePageMode" type="button" aria-label="한 쪽씩 보기" title="한 쪽씩 보기" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="1.5"/></svg></button>
+<button id="mobileTwoPageMode" type="button" aria-label="펼친 두 쪽 보기" title="펼친 두 쪽 보기" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="8.5" height="16" rx="1.3"/><rect x="13" y="4" width="8.5" height="16" rx="1.3"/></svg></button>
+</div>
+</div>
+<div id="secondaryTools" class="reader-secondary-tools">
+<div class="reader-tool-group mobile-page-jumps" role="group" aria-label="처음 또는 마지막 페이지로 이동">
+<button id="mobileFirstPage" type="button" aria-label="첫 페이지로 이동" title="첫 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 20 9 12l10-8M5 19V5"/></svg></button>
+<button id="mobileLastPage" type="button" aria-label="마지막 페이지로 이동" title="마지막 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 4 10 8-10 8M19 5v14"/></svg></button>
+</div>
+<div class="reader-tool-group zoom-controls" role="group" aria-label="화면 확대">
+<button id="zoomOut" type="button" aria-label="10% 축소" title="10% 축소"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+<output id="readerZoomLabel" class="reader-zoom-status" aria-live="polite">100%</output>
+<button id="zoomIn" type="button" aria-label="10% 확대" title="10% 확대"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+</div>
+<div class="reader-tool-group fit-controls" role="group" aria-label="화면 맞춤 방식">
+<button id="fitWidth" type="button" aria-label="너비 맞춤" title="너비 맞춤" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6v12M20 6v12M8 12h8M8 12l2.5-2.5M8 12l2.5 2.5M16 12l-2.5-2.5M16 12l-2.5 2.5"/></svg></button>
+<button id="fitPage" type="button" aria-label="페이지 맞춤" title="페이지 맞춤" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5a1 1 0 0 0-1 1v4M15 4h4a1 1 0 0 1 1 1v4M9 20H5a1 1 0 0 1-1-1v-4M15 20h4a1 1 0 0 0 1-1v-4"/><rect x="8" y="6.5" width="8" height="11" rx="1"/></svg></button>
+</div>
+<div class="reader-tool-group view-controls" role="group" aria-label="페이지 보기 방식">
+<button id="singlePageMode" type="button" aria-label="한 쪽씩 보기" title="한 쪽씩 보기" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="1.5"/></svg></button>
+<button id="twoPageMode" type="button" aria-label="두 쪽씩 보기" title="두 쪽씩 보기" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="8.5" height="16" rx="1.3"/><rect x="13" y="4" width="8.5" height="16" rx="1.3"/></svg></button>
+</div>
+<div class="reader-tool-group focus-controls" role="group" aria-label="집중 모드">
+<button id="focusMode" class="focus-tool" type="button" aria-label="집중 모드 시작" title="집중" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg><span>집중</span></button>
+</div>
+<div class="reader-tool-group bookmark-controls" role="group" aria-label="책갈피">
+<button id="bookmarkSave" class="bookmark-tool" type="button" aria-label="현재 페이지에 책갈피 설정" title="책갈피 설정" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z"/><path d="M12 7v6M9 10h6"/></svg><span>책갈피 설정</span></button>
+<button id="bookmarkGo" class="bookmark-tool" type="button" aria-label="책갈피로 이동" title="책갈피 이동" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12v18l-6-4-6 4V3Z"/><path d="M10 10h9M16 7l3 3-3 3"/></svg><span>책갈피 이동</span></button>
+<button id="bookmarkDelete" class="bookmark-tool" type="button" aria-label="책갈피 삭제" title="책갈피 삭제" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4V3Z"/><path d="m9 8 6 6M15 8l-6 6"/></svg><span>책갈피 삭제</span></button>
+</div>
+</div>
+<button id="mobileMore" class="mobile-more" type="button" aria-label="도구 더보기" title="더보기" aria-expanded="false" aria-controls="secondaryTools"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg></button>
+</div>
+<div id="nativePages" class="native-pages pdfjs-pages"></div>
+<button id="edgePrev" class="native-edge native-edge-prev" type="button" aria-label="이전 페이지" title="이전 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+<button id="edgeNext" class="native-edge native-edge-next" type="button" aria-label="다음 페이지" title="다음 페이지"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+</div>
+</section></main></div>
+<script type="module" src="./js/native-reader.js?v=20261018template"></script></body></html>
